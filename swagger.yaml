@@ -1,0 +1,155 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Connection Process App
+# during dev, should point to your local machine
+host: hercules.medicalshipment.com:8888
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /auth/login:
+    post:
+      tags:
+      - "Auth"
+      summary: Authenticates the User and provides "authToken" for subsequent requests.
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Your email and password for authentication."
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseAuth"
+            
+  /product/getlist:
+    post:
+      tags:
+      - "Product GetList"
+      summary: Authenticates the User and provides "authToken" for subsequent requests.
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products."
+          required: true
+          schema:
+            type: object
+            required:
+              - length
+              - offset
+            properties:
+              length:
+                type: string
+              offset:
+                type: string
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request
+          required: true
+          type: string
+          
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseGetList"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+# complex objects have schema definitions
+definitions:
+  SuccessResponseGetList:
+    required:
+      - ids
+      - products
+    properties:
+      ids:
+        type: array
+        items:
+          type: integer
+      products:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            Status:
+              type: string
+            Active:
+              type: string
+            Vendor: 
+              type: string
+            VendorPartNumber:
+              type: string
+            ManufacturerId:
+              type: string
+            ManufacturerName:
+              type: string
+            Price:
+              type: number
+            
+
+  SuccessResponse:
+    required:
+      - user
+      - authToken
+    properties:
+      user:
+        type: object
+        properties:
+          id: 
+            type: string
+          email: 
+            type: string
+          username: 
+            type: string
+          isAdmin:
+            type: string
+              
+            
+      authToken:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Unauthorized"
+  ErrorResponseAuth:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: invalid username or password
+  
