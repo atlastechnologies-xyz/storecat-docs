@@ -59,7 +59,16 @@ paths:
           type: string
         - in: "body"
           name: "body"
-          description: "The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab."
+          description: >
+            The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
+               * Price
+               * PartNumber
+               * ProductNumber
+               * ManufacturerID
+               * UOM
+               * Weight
+               * Height
+               * Length
           required: true
           schema:
             type: object
@@ -84,7 +93,7 @@ paths:
                         enum: ["Price","PartNumber", "ProductNumber","ManufacturerID","UOM","Weight","Height","Length"]
                         example: "Price"
                         description: >
-                          Available columns for sorting:
+                          Available categories for sorting:
                            * Price
                            * PartNumber
                            * ProductNumber
@@ -146,7 +155,7 @@ paths:
           type: string
         - in: "body"
           name: "body"
-          description: "The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products."
+          description: "The endpoint to retrieve the product list modified/created after a specific date. The first request should sent offset 0 and length as the number of desired products and the date after which the prodcuts are created/modified."
           required: true
           schema:
             type: object
