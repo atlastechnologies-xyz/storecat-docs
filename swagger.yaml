@@ -39,7 +39,7 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/SuccessResponse"
+            $ref: "#/definitions/SuccessResponseAuth"
         # responses may fall through to errors
         default:
           description: Error
@@ -49,7 +49,94 @@ paths:
   /product/getlist:
     post:
       tags:
-      - "Product GetList"
+      - "Get List of Products"
+      summary: Authenticates the User and provides "authToken" for subsequent requests.
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab."
+          required: true
+          schema:
+            type: object
+            required:
+              - length
+              - offset
+            properties:
+              length:
+                type: string
+                example: "100"
+              offset:
+                type: string
+                example: "0"
+              filters:
+                type: object
+                properties:
+                  normal:
+                    type: object
+                    properties:
+                      category:
+                        type: string
+                        enum: ["Price","PartNumber", "ProductNumber","ManufacturerID","UOM","Weight","Height","Length"]
+                        example: "Price"
+                        description: >
+                          Available columns for sorting:
+                           * Price
+                           * PartNumber
+                           * ProductNumber
+                           * ManufacturerID
+                           * UOM
+                           * Weight
+                           * Height
+                           * Length
+                      sortBy:
+                        type: string
+                        enum: ["ASC", "DESC"]
+                        description: >
+                          Sort order:
+                           * `ASC` - Ascending, from A to Z
+                           * `DESC` - Descending, from Z to A
+                      minPrice:
+                        type: number
+                        example: 0
+                      maxPrice:
+                        type: number
+                        example: 100000
+                  custom:
+                    type: array
+                    items: 
+                      type: object
+                      properties:
+                        category:
+                          type: string
+                          enum: ["Price","PartNumber", "ProductNumber","ManufacturerID","UOM","Weight","Height","Length"]
+
+                        operator:
+                          type: string
+                          enum: ["eq","gt","lt"]
+                        value:
+                          type: string
+                          example: "0.01"
+
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseGetList"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseGetList"
+  /product/getLatestProducts:
+    post:
+      tags:
+      - "Get Latest Products"
       summary: Authenticates the User and provides "authToken" for subsequent requests.
       parameters:
         - in: "body"
@@ -64,28 +151,67 @@ paths:
             properties:
               length:
                 type: string
+                example: "100"
               offset:
                 type: string
+                example: "0"
+              date:
+                type: string
+                example: "2020-06-26"
         - name: Authorization
           in: header
           description: authToken retrieved in previous auth request
           required: true
           type: string
-          
+        
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/SuccessResponseGetList"
+            $ref: "#/definitions/SuccessResponseGetLatest"
         # responses may fall through to errors
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/ErrorResponseGetLatest"
 
 # complex objects have schema definitions
 definitions:
+
+  SuccessResponseGetLatest:
+    required:
+      - products
+    properties:
+      products:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            Status:
+              type: string
+            Active:
+              type: string
+            Vendor: 
+              type: string
+            VendorPartNumber:
+              type: string
+            ManufacturerId:
+              type: string
+            ManufacturerName:
+              type: string
+            Price:
+              type: number
+                        
+  ErrorResponseGetLatest:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "length, offset or date is missing"
   SuccessResponseGetList:
     required:
       - ids
@@ -117,8 +243,14 @@ definitions:
             Price:
               type: number
             
-
-  SuccessResponse:
+  ErrorResponseGetList:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Unauthorized"
+  SuccessResponseAuth:
     required:
       - user
       - authToken
@@ -135,16 +267,9 @@ definitions:
           isAdmin:
             type: string
               
-            
       authToken:
         type: string
-  ErrorResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
-        example: "Unauthorized"
+
   ErrorResponseAuth:
     required:
       - message
