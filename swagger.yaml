@@ -139,6 +139,11 @@ paths:
       - "Get Latest Products"
       summary: Authenticates the User and provides "authToken" for subsequent requests.
       parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request
+          required: true
+          type: string
         - in: "body"
           name: "body"
           description: "The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products."
@@ -158,11 +163,7 @@ paths:
               date:
                 type: string
                 example: "2020-06-26"
-        - name: Authorization
-          in: header
-          description: authToken retrieved in previous auth request
-          required: true
-          type: string
+
         
       responses:
         "200":
