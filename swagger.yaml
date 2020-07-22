@@ -127,9 +127,10 @@ paths:
                         operator:
                           type: string
                           enum: ["eq","gt","lt"]
+                          example: "gt"
                         value:
                           type: string
-                          example: "0.01"
+                          example: "0.00"
 
       responses:
         "200":
@@ -266,9 +267,10 @@ paths:
                         operator:
                           type: string
                           enum: ["eq","gt","lt"]
+                          example: "gt"
                         value:
                           type: string
-                          example: "0.01"
+                          example: "0.00"
       responses:
         "200":
           description: Success
