@@ -357,18 +357,6 @@ paths:
               DefaultVendor:
                 type: boolean
                 example: true
-              UOM:
-                type: string
-                example: "ea"
-              Cost:
-                type: integer
-                example: 10
-              MinQuantity:
-                type: integer
-                example: 0
-              Active:
-                type: boolean
-                example: true
               Description:
                 type: string
               ManufacturerId:
@@ -407,8 +395,6 @@ paths:
                     MinQuantity:
                       type: integer
                       example: 0
-                    PartId:
-                      type: integer
                     Per:
                       type: integer
                       example: 1
