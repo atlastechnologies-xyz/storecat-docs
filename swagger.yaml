@@ -323,6 +323,52 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponseGetSuppliersList"
   
+ 
+  /uom/getUomList:
+    post:
+      tags:
+      - "Get List of available UOMs"
+      summary: "The endpoint to retrieve the list of availble UOMs for usage in add Part."
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseGetUOM"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseGetUOM"
+  /supplier/getsuppliers:
+    post:
+      tags:
+      - "Get List of Available Vendors and Manufacturers"
+      summary: "The endpoint to retrieve the list of available Vendors and Manufacturers"
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseGetSuppliers"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseGetSuppliers"
+
   /part/add:
     post:
       tags:
@@ -427,54 +473,199 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponseAddPart"
+
+  /product/add:
+    post:
+      tags:
+      - "Add new products"
+      summary: "The endpoint will let you add a product."
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: >
+            The endpoint will let you add a product. Here 'PartNumber', 'PartUOM' must be a valid from search/parts API, similarly 'UOM' must also be a valid values from the Uom/getUOMs endpoint. The ProductPictureUrl will be a stringified(JSON.stringify(array)) json array of all images urls.
+          required: true
+          schema:
+            type: object
+            properties:
+              IsBOM:
+                type: boolean
+                example: false
+              Active:
+                type: boolean
+                example: true
+              AlertNote:
+                type: boolean
+                example: false
+              AllowUOM:
+                type: boolean
+                example: false
+              Class:
+                type: string
+                example: ""
+              ComboBox:
+                type: boolean
+                example: false
+              DefaultFlag:
+                type: string
+                example: ""
+              Height:
+                type: integer
+                example: 0
+              IncomeAccount:
+                type: string
+                example: ""
+              ExpenseAccountName:
+                type: string
+                example: ""
+              Length:
+                type: integer
+                example: 0
+              PartNumber:
+                type: integer
+                example: 4483
+              PartUOM:
+                type: integer
+                example: 17516
+              Price:
+                type: integer
+                example: 25
+              ProductDescription:
+                type: string
+                example: ""
+              ProductDetails:
+                type: string
+                example: ""
+              ProductPictureUrl:
+                type: string
+                example: ""
+              ProductSKU:
+                type: string
+                example: ""
+              ProductSOItemType:
+                type: string
+                example: ""
+              ProductUPC:
+                type: string
+                example: ""
+              Taxable:
+                type: boolean
+                example: false
+              UOM:
+                type: string
+                example: "ea"
+              UnitOfMeasureName:
+                type: string
+                example: "Lbs"
+              Weight:
+                type: integer
+                example: 0
+              WeightUOM:
+                type: string
+                example: "Kg"
+              CatLookup:
+                type: string
+                example: ""
+              SizeUOM:
+                type: string
+                example: "in"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseAddProduct"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseAddProduct"
             
-  /uom/getUomList:
+  /search/parts:
     post:
       tags:
-      - "Get List of available UOMs"
-      summary: "The endpoint to retrieve the list of availble UOMs for usage in add Part."
+      - "Search parts"
+      summary: "The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product."
       parameters:
         - name: Authorization
           in: header
           description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
           required: true
           type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/SuccessResponseGetUOM"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponseGetUOM"
-  /supplier/getsuppliers:
-    post:
-      tags:
-      - "Get List of Available Vendors and Manufacturers"
-      summary: "The endpoint to retrieve the list of available Vendors and Manufacturers"
-      parameters:
-        - name: Authorization
-          in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+        - in: "body"
+          name: "body"
+          description: >
+            The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product. 
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              keyword:
+                type: string
+                example: "part name"
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/SuccessResponseGetSuppliers"
+            $ref: "#/definitions/SuccessResponseSearchParts"
         # responses may fall through to errors
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponseGetSuppliers"
-  
+            $ref: "#/definitions/ErrorResponseSearchParts"
+
 # complex objects have schema definitions
 definitions:
+  SuccessResponseSearchParts:
+    properties:
+      parts:
+        type: array
+        items: 
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 3145
+            ManufacturerName:
+              type: string
+              example: "AmericanDiagnosticCorporation"
+            ManufacturerId: 
+              type: string
+              example: "768-641-11AAD"
+            DefaultVendor: 
+              type: boolean
+              example: true
+            UOMs:
+              type: array
+              items: 
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 345
+                  Status:
+                    type: string
+                    example: "active"
+                  Cost:
+                    type: number
+                    example: 10
+                  PartId:
+                    type: integer
+                    example: 3145
+
+  ErrorResponseSearchParts:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Please specify a keyword"
   SuccessResponseGetSuppliers:
     properties:
       vendors:
@@ -532,6 +723,20 @@ definitions:
         type: string
         example: "Part added Successfully"
   ErrorResponseAddPart:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Unauthorized"
+  SuccessResponseAddProduct:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Product added Successfully"
+  ErrorResponseAddProduct:
     required:
       - message
     properties:
