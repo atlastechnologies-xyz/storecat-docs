@@ -622,7 +622,7 @@ paths:
   /search/products:
     post:
       tags:
-      - "Search Products for BOM"
+      - "Search Products"
       summary: "The endpoint to search through the Products, and used the id(BOMParentID) while creating the BOM."
       parameters:
         - name: Authorization
@@ -656,7 +656,7 @@ paths:
     post:
       tags:
       - "Add new BOMs"
-      summary: "The endpoint will let you add a BOM."
+      summary: "The endpoint will let you add a BOM. A BOM must contain 2 or more than 2 BOMChildren(Products)"
       parameters:
         - name: Authorization
           in: header
@@ -666,7 +666,7 @@ paths:
         - in: "body"
           name: "body"
           description: >
-            The endpoint will let you add a BOM. Here, BOMParentID (under BOMChildren) must be a valid Id obtained from search/parts API. The ProductPictureUrl will be a stringified(JSON.stringify(array)) json array of all images urls.
+            The endpoint will let you add a BOM. Here, BOMParentID (under BOMChildren) must be a valid Id obtained from search/products API. The ProductPictureUrl will be a stringified(JSON.stringify(array)) json array of all images urls.
           required: true
           schema:
             type: object
