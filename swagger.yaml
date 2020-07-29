@@ -474,6 +474,39 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponseAddPart"
 
+  /search/parts:
+    post:
+      tags:
+      - "Search parts"
+      summary: "The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product."
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: >
+            The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product. 
+          required: true
+          schema:
+            type: object
+            properties:
+              keyword:
+                type: string
+                example: "part name"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseSearchParts"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseSearchParts"
   /product/add:
     post:
       tags:
@@ -579,18 +612,18 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/SuccessResponseAddProduct"
+            $ref: "#/definitions/SuccessResponseAddBOM"
         # responses may fall through to errors
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponseAddProduct"
+            $ref: "#/definitions/ErrorResponseAddBOM"
             
-  /search/parts:
+  /search/products:
     post:
       tags:
-      - "Search parts"
-      summary: "The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product."
+      - "Search Products for BOM"
+      summary: "The endpoint to search through the Products, and used the id(BOMParentID) while creating the BOM."
       parameters:
         - name: Authorization
           in: header
@@ -600,30 +633,183 @@ paths:
         - in: "body"
           name: "body"
           description: >
-            The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product. 
+            The endpoint to search through the products,and used the id(BOMParentID) while creating the BOM. 
           required: true
           schema:
             type: object
             properties:
               keyword:
                 type: string
-                example: "part name"
+                example: "product name"
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/SuccessResponseSearchParts"
+            $ref: "#/definitions/SuccessResponseSearchProducts"
         # responses may fall through to errors
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponseSearchParts"
+            $ref: "#/definitions/ErrorResponseSearchProducts"
+  /bom/addproduct:
+    post:
+      tags:
+      - "Add new BOMs"
+      summary: "The endpoint will let you add a BOM."
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: >
+            The endpoint will let you add a BOM. Here, BOMParentID (under BOMChildren) must be a valid Id obtained from search/parts API. The ProductPictureUrl will be a stringified(JSON.stringify(array)) json array of all images urls.
+          required: true
+          schema:
+            type: object
+            properties:
+              IsBOM:
+                type: boolean
+                example: true
+              Active:
+                type: boolean
+                example: true
+              AlertNote:
+                type: boolean
+                example: false
+              AllowUOM:
+                type: boolean
+                example: false
+              Class:
+                type: string
+                example: ""
+              ComboBox:
+                type: boolean
+                example: false
+              DefaultFlag:
+                type: string
+                example: ""
+              Height:
+                type: integer
+                example: 0
+              IncomeAccount:
+                type: string
+                example: ""
+              ExpenseAccountName:
+                type: string
+                example: ""
+              Length:
+                type: integer
+                example: 0
+              Price:
+                type: integer
+                example: 25
+              ProductDescription:
+                type: string
+                example: ""
+              ProductDetails:
+                type: string
+                example: ""
+              ProductPictureUrl:
+                type: string
+                example: ""
+              ProductSKU:
+                type: string
+                example: ""
+              ProductSOItemType:
+                type: string
+                example: ""
+              ProductUPC:
+                type: string
+                example: ""
+              Taxable:
+                type: boolean
+                example: false
+              UnitOfMeasureName:
+                type: string
+                example: "Lbs"
+              Weight:
+                type: integer
+                example: 0
+              WeightUOM:
+                type: string
+                example: "Kg"
+              CatLookup:
+                type: string
+                example: ""
+              SizeUOM:
+                type: string
+                example: "in"
+              BOMChildren:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    Price:
+                      type: number
+                    BOMParentID:
+                      type: integer
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseAddProduct"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseAddProduct"
+            
+
 
 # complex objects have schema definitions
 definitions:
+  SuccessResponseSearchProducts:
+    properties:
+      total: 
+        type: integer
+        example: 10
+      products:
+        type: array
+        items: 
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            Status:
+              type: string
+              example: "active"
+            Vendor:
+              type: string
+              example: "AMSCO"
+            ManufacturerName:
+              type: string
+              example: "AmericanDiagnosticCorporation"
+            ManufacturerId: 
+              type: string
+              example: "768-641-11AAD"
+            DefaultFlag: 
+              type: boolean
+              example: true
+            
+
+  ErrorResponseSearchProducts:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Please specify a keyword"
   SuccessResponseSearchParts:
     properties:
+      total: 
+        type: integer
+        example: 10
       parts:
         type: array
         items: 
@@ -737,6 +923,20 @@ definitions:
         type: string
         example: "Product added Successfully"
   ErrorResponseAddProduct:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Unauthorized"
+  SuccessResponseAddBOM:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: "Product created successfully"
+  ErrorResponseAddBOM:
     required:
       - message
     properties:
