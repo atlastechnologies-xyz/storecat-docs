@@ -45,22 +45,54 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponseAuth"
-            
-  /product/getlist:
+  /product/get:
     post:
       tags:
-      - "Get List of Products"
-      summary: The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab.
+      - "Get Single Product"
+      summary: "The endpoint to get a single product."
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the product list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
+            The endpoint to search through the parts, and used the partid(PartNumber) and uomid(PartUOM) while creating the product. 
+          required: true
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                example: "productId"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponseProductGet"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponseProductGet"
+  /product/getlist:
+    post:
+      tags:
+      - "Get List of Products"
+      summary: The endpoint to retrieve the product list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab.
+      parameters:
+        - name: Authorization
+          in: header
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: >
+            The endpoint to retrieve the product list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab. Available categories:
                * Price
                * PartNumber
                * ProductNumber
@@ -147,7 +179,7 @@ paths:
     post:
       tags:
       - "Get Latest Products"
-      summary: The endpoint to retrieve the product list modified/created after a specific date. The first request should sent offset 0 and length as the number of desired products and the date after which the prodcuts are created/modified.
+      summary: The endpoint to retrieve the product list modified/created after a specific date. The first request should be sent offset 0 and length as the number of desired products and the date after which the products are created/modified.
       parameters:
         - name: Authorization
           in: header
@@ -156,7 +188,7 @@ paths:
           type: string
         - in: "body"
           name: "body"
-          description: "The endpoint to retrieve the product list modified/created after a specific date. The first request should sent offset 0 and length as the number of desired products and the date after which the prodcuts are created/modified."
+          description: "The endpoint to retrieve the product list modified/created after a specific date. The first request should be sent offset 0 and length as the number of desired products and the date after which the products are created/modified."
           required: true
           schema:
             type: object
@@ -190,17 +222,17 @@ paths:
     post:
       tags:
       - "Get List of BOMS"
-      summary: "The endpoint to retrieve the list of BOMs based on the filter.The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters."
+      summary: "The endpoint to retrieve the list of BOMs based on the filter. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters."
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the BOMs list. The first request should sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
+            The endpoint to retrieve the BOMs list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
                * Price
                * PartNumber
                * ProductNumber
@@ -287,17 +319,17 @@ paths:
     post:
       tags:
       - "Get List of Suppliers"
-      summary: "The endpoint to retrieve the list of Suppliers.The first request should sent offset 0 and length as the number of desired Suppliers. The Normal and Custom are optional filters."
+      summary: "The endpoint to retrieve the list of Suppliers. The first request should be sent offset 0 and length as the number of desired Suppliers. The Normal and Custom are optional filters."
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the list of Suppliers.The first request should sent offset 0 and length as the number of desired Suppliers.. For detailed view, visit Model tab. 
+            The endpoint to retrieve the list of Suppliers. The first request should be sent offset 0 and length as the number of desired Suppliers. For a detailed view, visit the Model tab. 
           required: true
           schema:
             type: object
@@ -332,7 +364,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
       responses:
@@ -354,7 +386,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
       responses:
@@ -377,7 +409,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
@@ -482,7 +514,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
@@ -515,7 +547,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
@@ -627,7 +659,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
@@ -660,7 +692,7 @@ paths:
       parameters:
         - name: Authorization
           in: header
-          description: authToken retrieved in previous auth request, Every new request to Auth will expire previous authToken and generate a new one.
+          description: authToken retrieved in previous auth request, Every new request to Auth will expire the previous authToken and generate a new one.
           required: true
           type: string
         - in: "body"
@@ -1015,6 +1047,49 @@ definitions:
       message:
         type: string
         example: "length, offset or date is missing"
+  SuccessResponseProductGet:
+    required:
+        - ids
+        - products
+    properties:
+      product:
+        type: object
+        properties:
+          id:
+            type: string
+          Status:
+            type: string
+          Active:
+            type: string
+          Vendor: 
+            type: string
+          VendorPartNumber:
+            type: string
+          ManufacturerId:
+            type: string
+          ManufacturerName:
+            type: string
+          Price:
+            type: number
+          ProductURL:
+            type: string
+          COGS:
+            type: number
+          ProductSalesforce:
+            type: object
+          RelatedCompetitorProducts:
+            type: array
+            items:
+              type: object
+          SimilarManufacturerParts:
+            type: array
+            items:
+              type: object
+  ErrorResponseProductGet:
+    properties:
+      message:
+        type: string
+        example: "Product Not found"
   SuccessResponseGetList:
     required:
       - ids
@@ -1045,6 +1120,8 @@ definitions:
               type: string
             Price:
               type: number
+            COGS:
+              type: number
             
   ErrorResponseGetList:
     required:
@@ -1069,7 +1146,6 @@ definitions:
             type: string
           isAdmin:
             type: string
-              
       authToken:
         type: string
 
