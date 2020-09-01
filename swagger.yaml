@@ -82,7 +82,7 @@ paths:
     post:
       tags:
       - "Get List of Products"
-      summary: The endpoint to retrieve the product list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab.
+      summary: The endpoint to retrieve the product list. The first request should send offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab.
       parameters:
         - name: Authorization
           in: header
@@ -92,7 +92,7 @@ paths:
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the product list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab. Available categories:
+            The endpoint to retrieve the product list. The first request should send offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For a detailed view, visit the Model tab. Available categories:
                * Price
                * PartNumber
                * ProductNumber
@@ -179,7 +179,7 @@ paths:
     post:
       tags:
       - "Get Latest Products"
-      summary: The endpoint to retrieve the product list modified/created after a specific date. The first request should be sent offset 0 and length as the number of desired products and the date after which the products are created/modified.
+      summary: The endpoint to retrieve the product list modified/created after a specific date. The first request should send offset 0 and length as the number of desired products and the date after which the products are created/modified.
       parameters:
         - name: Authorization
           in: header
@@ -188,7 +188,7 @@ paths:
           type: string
         - in: "body"
           name: "body"
-          description: "The endpoint to retrieve the product list modified/created after a specific date. The first request should be sent offset 0 and length as the number of desired products and the date after which the products are created/modified."
+          description: "The endpoint to retrieve the product list modified/created after a specific date. The first request should send offset 0 and length as the number of desired products and the date after which the products are created/modified."
           required: true
           schema:
             type: object
@@ -222,7 +222,7 @@ paths:
     post:
       tags:
       - "Get List of BOMS"
-      summary: "The endpoint to retrieve the list of BOMs based on the filter. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters."
+      summary: "The endpoint to retrieve the list of BOMs based on the filter. The first request should send offset 0 and length as the number of desired products. The Normal and Custom are optional filters."
       parameters:
         - name: Authorization
           in: header
@@ -232,7 +232,7 @@ paths:
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the BOMs list. The first request should be sent offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
+            The endpoint to retrieve the BOMs list. The first request should send offset 0 and length as the number of desired products. The Normal and Custom are optional filters. For detailed view, visit Model tab. Available categories:
                * Price
                * PartNumber
                * ProductNumber
@@ -319,7 +319,7 @@ paths:
     post:
       tags:
       - "Get List of Suppliers"
-      summary: "The endpoint to retrieve the list of Suppliers. The first request should be sent offset 0 and length as the number of desired Suppliers. The Normal and Custom are optional filters."
+      summary: "The endpoint to retrieve the list of Suppliers. The first request should send offset 0 and length as the number of desired Suppliers. The Normal and Custom are optional filters."
       parameters:
         - name: Authorization
           in: header
@@ -329,7 +329,7 @@ paths:
         - in: "body"
           name: "body"
           description: >
-            The endpoint to retrieve the list of Suppliers. The first request should be sent offset 0 and length as the number of desired Suppliers. For a detailed view, visit the Model tab. 
+            The endpoint to retrieve the list of Suppliers. The first request should send offset 0 and length as the number of desired Suppliers. For a detailed view, visit the Model tab. 
           required: true
           schema:
             type: object
